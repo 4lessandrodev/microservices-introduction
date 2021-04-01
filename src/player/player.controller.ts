@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { PlayerService } from './player.service';
-import { CustomParamPipe } from './pipes/custom-param.pipe';
+import { CustomParamPipe } from '../common/pipes/custom-param.pipe';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 
 @Controller('api/v1/players')
