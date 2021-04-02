@@ -9,8 +9,8 @@ export class Event {
   @Prop({ type: String, required: true })
   name: string;
 
-  @Prop({ type: Operation, required: true })
-  operation: string;
+  @Prop({ type: String, enum: Operation, required: true })
+  operation: keyof typeof Operation;
 
   @Prop({ type: Number, required: true })
   value: number;

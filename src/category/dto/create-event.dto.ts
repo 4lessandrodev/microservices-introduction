@@ -12,7 +12,7 @@ export class CreateEventDto {
 
   @IsNotEmpty()
   @IsEnum(Operation)
-  readonly operation: Operation;
+  readonly operation: keyof typeof Operation;
 
   @IsNumber()
   @IsNotEmpty()

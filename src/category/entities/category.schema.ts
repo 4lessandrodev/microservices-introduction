@@ -21,7 +21,7 @@ export class Category {
   @Prop({ type: Event, required: true })
   events: Array<Event>;
 
-  @Prop({ ref: 'Player', type: Types.ObjectId, default: [] })
+  @Prop({ ref: 'Player', type: Types.ObjectId, default: [], required: false })
   players?: Array<string>;
 }
 
