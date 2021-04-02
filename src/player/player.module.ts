@@ -11,5 +11,6 @@ import { PlayerService } from './player.service';
   ],
   controllers: [PlayerController],
   providers: [PlayerRepository, PlayerService],
+  exports: [PlayerRepository],
 })
 export class PlayerModule {}
