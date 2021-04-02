@@ -1,62 +1,46 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { Player, PlayerDocument } from './entities/player.schema';
-import { RepositoryInterface } from './interfaces/repository.interface';
+import { PlayerRepositoryInterface } from './interfaces/player-repository.interface';
 
 @Injectable()
-export class PlayerRepository implements RepositoryInterface {
+export class PlayerRepository implements PlayerRepositoryInterface {
   constructor(
     @InjectModel(Player.name)
-    private readonly playerRepository: Model<PlayerDocument>,
+    private readonly playerRepo: Model<PlayerDocument>,
   ) {}
 
   async savePlayer(createPlayerDto: CreatePlayerDto): Promise<void> {
-    const { email } = createPlayerDto;
-    const userAlreadyExists = await this.playerRepository.findOne({ email });
-
-    if (userAlreadyExists) {
-      throw new ConflictException(`Player with email ${email} already exists`);
-    }
-
-    await (await this.playerRepository.create(createPlayerDto)).save();
+    await (await this.playerRepo.create(createPlayerDto)).save();
   }
 
   async updatePlayer(updatePlayerDto: UpdatePlayerDto): Promise<void> {
-    const { name, phone, _id } = updatePlayerDto;
-    const userExists = await this.playerRepository.findById(_id);
-
-    if (!userExists) {
-      throw new NotFoundException(`Player with _id ${_id} does not exists`);
-    }
-    await userExists.updateOne({ name, phone }).exec();
+    const { _id } = updatePlayerDto;
+    await this.playerRepo
+      .findByIdAndUpdate(_id, { $set: updatePlayerDto })
+      .exec();
   }
 
   async findPlayerById(_id: string): Promise<Player> {
-    const foundPlayer = await this.playerRepository.findById(_id);
-
-    if (!foundPlayer) {
-      throw new NotFoundException(`Player with _id ${_id} does not exists`);
-    }
-    return foundPlayer;
+    return await this.playerRepo.findById(_id).exec();
   }
 
   async getPlayers(): Promise<Player[]> {
-    return this.playerRepository.find();
+    return this.playerRepo.find().exec();
   }
 
   async deletePlayerById(_id: string): Promise<void> {
-    const userExists = await this.playerRepository.findById(_id);
+    await this.playerRepo.deleteOne({ _id }).exec();
+  }
 
-    if (!userExists) {
-      throw new NotFoundException(`Player with _id ${_id} does not exists`);
-    }
-    await this.playerRepository.deleteOne({ _id });
+  async playerExist(_id: string): Promise<boolean> {
+    return await this.playerRepo.exists({ _id });
+  }
+
+  async findPlayerByEmail(email: string): Promise<Player> {
+    return this.playerRepo.findOne({ email }).exec();
   }
 }
