@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type PlayerDocument = Player & Document;
 
-@Schema({ autoCreate: true, timestamps: true })
+@Schema({ autoCreate: true, timestamps: true, collection: 'players' })
 export class Player {
   @Prop()
   name: string;
