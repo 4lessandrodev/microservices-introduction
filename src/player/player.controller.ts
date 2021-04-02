@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { CreatePlayerDto } from './dto/create-player.dto';
 import { PlayerService } from './player.service';
-import { CustomParamPipe } from '../common/pipes/custom-param.pipe';
 import { UpdatePlayerDto } from './dto/update-player.dto';
+import { MongoIdPipe } from '../common/pipes/mongo-id.pipe';
 
 @Controller('api/v1/players')
 export class PlayerController {
@@ -31,21 +31,21 @@ export class PlayerController {
   }
 
   @Get('/:_id')
-  getPlayerById(@Param('_id', CustomParamPipe) _id: string) {
+  getPlayerById(@Param('_id', MongoIdPipe) _id: string) {
     return this.playerService.findPlayerById(_id);
   }
 
   @Put('/:_id')
   updatePlayer(
     @Body() updatePlayerDto: UpdatePlayerDto,
-    @Param('_id', CustomParamPipe) _id: string,
+    @Param('_id', MongoIdPipe) _id: string,
   ) {
     updatePlayerDto._id = _id;
     return this.playerService.updatePlayer(updatePlayerDto);
   }
 
   @Delete('/:_id')
-  deletePlayerById(@Param('_id', CustomParamPipe) _id: string) {
+  deletePlayerById(@Param('_id', MongoIdPipe) _id: string) {
     return this.playerService.deletePlayerById(_id);
   }
 }
