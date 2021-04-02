@@ -3,6 +3,7 @@ import { PlayerModule } from './player/player.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CategoryModule } from './category/category.module';
 import { PlaysModule } from './plays/plays.module';
+import { ChallengeModule } from './challenge/challenge.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PlaysModule } from './plays/plays.module';
     PlayerModule,
     CategoryModule,
     PlaysModule,
+    ChallengeModule,
   ],
   controllers: [],
   providers: [],
