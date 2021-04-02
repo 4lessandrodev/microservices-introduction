@@ -48,6 +48,6 @@ export class ChallengeRepository implements ChallengeRepositoryInterface {
   }
 
   async getChallenges(): Promise<Challenge[]> {
-    return await this.challengeModel.find().populate('players').exec();
+    return await this.challengeModel.find();
   }
 }

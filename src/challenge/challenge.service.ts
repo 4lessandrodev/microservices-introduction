@@ -1,5 +1,6 @@
 import { Inject, NotFoundException } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
+import { PlayerRepository } from '../player/player.repository';
 import { ChallengeRepository } from './challenge.repository';
 import { ChangeChallengeStatusDto } from './dto/change-challenge-status.dto';
 import { CreateChallengeDto } from './dto/create-challenge.dto';
@@ -10,9 +11,22 @@ export class ChallengeService {
   constructor(
     @Inject(ChallengeRepository)
     private readonly challengeRepo: ChallengeRepository,
+
+    @Inject(PlayerRepository)
+    private readonly playerRepo: PlayerRepository,
   ) {}
 
-  createChallenge(createChallengeDto: CreateChallengeDto): Promise<void> {
+  async createChallenge(createChallengeDto: CreateChallengeDto): Promise<void> {
+    const playersExists = await this.playerRepo.getPlayersByIds(
+      createChallengeDto.players.map((player) => player._id),
+    );
+
+    if (playersExists.length < 2) {
+      throw new NotFoundException(
+        `Player [${createChallengeDto.players}] does not exist`,
+      );
+    }
+
     return this.challengeRepo.saveChallenge(createChallengeDto);
   }
 

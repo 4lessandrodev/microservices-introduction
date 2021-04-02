@@ -43,4 +43,8 @@ export class PlayerRepository implements PlayerRepositoryInterface {
   async findPlayerByEmail(email: string): Promise<Player> {
     return this.playerRepo.findOne({ email }).exec();
   }
+
+  async getPlayersByIds(_ids: string[]): Promise<Array<Player>> {
+    return await this.playerRepo.find().where('_id').in(_ids);
+  }
 }

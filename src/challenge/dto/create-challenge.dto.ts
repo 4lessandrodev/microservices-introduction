@@ -1,4 +1,15 @@
-import { IsISO8601, IsMongoId, IsString } from 'class-validator';
+import {
+  ArrayMinSize,
+  IsISO8601,
+  IsMongoId,
+  IsNotEmpty,
+  IsString,
+} from 'class-validator';
+
+export class PlayerDto {
+  @IsMongoId()
+  _id: string;
+}
 
 export class CreateChallengeDto {
   @IsISO8601()
@@ -9,4 +20,8 @@ export class CreateChallengeDto {
 
   @IsString()
   readonly category: string;
+
+  @IsNotEmpty()
+  @ArrayMinSize(2)
+  players: PlayerDto[];
 }

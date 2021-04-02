@@ -24,7 +24,7 @@ export class ChallengeController {
 
   @Post()
   createChallenge(
-    @Body() createChallengeDto: CreateChallengeDto,
+    @Body(ValidationPipe) createChallengeDto: CreateChallengeDto,
   ): Promise<void> {
     return this.challengeService.createChallenge(createChallengeDto);
   }

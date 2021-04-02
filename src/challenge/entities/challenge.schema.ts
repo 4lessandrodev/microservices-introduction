@@ -9,6 +9,12 @@ export enum ChallengeStatus {
   'REFUSED',
 }
 
+@Schema()
+export class PlayerChallenge {
+  @Prop({ type: Types.ObjectId, required: true })
+  _id: string;
+}
+
 export type ChallengeDocument = Challenge & Document;
 
 @Schema({ autoCreate: true, autoIndex: true, collection: 'challenges' })
@@ -30,6 +36,9 @@ export class Challenge {
 
   @Prop({ type: Types.ObjectId, ref: 'Category' })
   category: string;
+
+  @Prop({ type: Types.ObjectId, ref: 'Player', required: true })
+  players: Array<PlayerChallenge>;
 }
 
 export const ChallengeSchema = SchemaFactory.createForClass(Challenge);

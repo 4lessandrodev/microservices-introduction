@@ -1,4 +1,4 @@
-import { IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { ArrayMinSize, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 
 export class ResultDto {
   @IsNotEmpty()
@@ -10,10 +10,10 @@ export class CreatePlaysDto {
   @IsMongoId()
   readonly def: string;
 
-  @IsOptional()
+  @IsNotEmpty()
   result: ResultDto[];
 
-  @IsOptional()
   @IsMongoId({ each: true })
+  @ArrayMinSize(2)
   players: string[];
 }
