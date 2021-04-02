@@ -11,6 +11,7 @@ import { CategoryModule } from './category/category.module';
         connectTimeoutMS: 300,
         useNewUrlParser: true,
         useCreateIndex: true,
+        useFindAndModify: false,
       },
     ),
     PlayerModule,
