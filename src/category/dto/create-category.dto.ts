@@ -11,13 +11,13 @@ export class CreateCategoryDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(7)
-  readonly category: string;
+  readonly category!: string;
 
   @IsString()
   @IsNotEmpty()
-  readonly description: string;
+  readonly description!: string;
 
   @IsArray()
   @ArrayMinSize(1)
-  events: Array<CreateEventDto>;
+  events!: Array<CreateEventDto>;
 }

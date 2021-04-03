@@ -3,17 +3,21 @@ import { ArrayMinSize, IsMongoId, IsNotEmpty, IsString } from 'class-validator';
 export class ResultDto {
   @IsNotEmpty()
   @IsString()
-  set: string;
+  set!: string;
+}
+
+export class PlayerOnPlay {
+  @IsMongoId()
+  _id!: string;
 }
 
 export class CreatePlaysDto {
   @IsMongoId()
-  readonly def: string;
+  readonly def!: string;
 
   @IsNotEmpty()
-  result: ResultDto[];
+  result!: ResultDto[];
 
-  @IsMongoId({ each: true })
   @ArrayMinSize(2)
-  players: string[];
+  players!: PlayerOnPlay[];
 }

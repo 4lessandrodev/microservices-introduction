@@ -8,7 +8,7 @@ export class ChangeChallengeStatusDto {
     ).filter((item) => typeof item !== 'number')}`,
   })
   @IsNotEmpty()
-  readonly status: keyof typeof ChallengeStatus;
+  readonly status!: keyof typeof ChallengeStatus;
 
-  challengeId: string;
+  challengeId!: string;
 }

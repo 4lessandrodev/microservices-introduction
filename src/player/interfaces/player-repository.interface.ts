@@ -10,5 +10,5 @@ export interface PlayerRepositoryInterface {
   deletePlayerById: (_id: string) => Promise<void>;
   getPlayersByIds: (_ids: string[]) => Promise<Array<Player>>;
   playerExist: (_id: string) => Promise<boolean>;
-  findPlayerByEmail: (email: string) => Promise<Player>;
+  findPlayerByEmail: (email: string) => Promise<Player | null>;
 }

@@ -2,8 +2,8 @@ import { IsNotEmpty } from 'class-validator';
 
 export class AddPlayerToCategoryDto {
   @IsNotEmpty()
-  playerId: string;
+  playerId!: string;
 
   @IsNotEmpty()
-  category: string;
+  category!: string;
 }

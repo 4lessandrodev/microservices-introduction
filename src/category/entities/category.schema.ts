@@ -10,19 +10,19 @@ export type CategoryDocument = Category & Document;
   collection: 'categories',
 })
 export class Category {
-  readonly _id: Types.ObjectId;
+  readonly _id!: Types.ObjectId;
 
   @Prop({ type: String, unique: true, maxlength: 7, required: true })
-  category: string;
+  category!: string;
 
   @Prop({ type: String, required: true })
-  description: string;
+  description!: string;
 
   @Prop({ type: Event, required: true })
-  events: Array<Event>;
+  events!: Array<Event>;
 
   @Prop({ ref: 'Player', type: Types.ObjectId, default: [], required: false })
-  players?: Array<string>;
+  players!: Array<string>;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);

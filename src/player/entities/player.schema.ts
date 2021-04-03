@@ -5,23 +5,25 @@ export type PlayerDocument = Player & Document;
 
 @Schema({ autoCreate: true, timestamps: true, collection: 'players' })
 export class Player {
+  readonly _id!: string;
+
   @Prop()
-  name: string;
+  name!: string;
 
   @Prop({ unique: true, type: String })
-  email: string;
+  email!: string;
 
   @Prop({ type: String })
-  phone: string;
+  phone!: string;
 
   @Prop({ type: String })
-  ranking: string;
+  ranking!: string;
 
   @Prop({ type: Number })
-  posicaoRanking: number;
+  posicaoRanking!: number;
 
   @Prop({ type: String })
-  urlFotoJogador: string;
+  urlFotoJogador!: string;
 }
 
 export const PlayerSchema = SchemaFactory.createForClass(Player);

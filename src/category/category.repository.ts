@@ -1,3 +1,7 @@
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AddPlayerToCategoryDto } from './dto/add-player-to-category.dto';
@@ -35,25 +39,36 @@ export class CategoryRepository implements CategoryRepositoryInterface {
   }
 
   async getCategories(): Promise<Category[]> {
-    return await this.categoryModel.find().populate('players').exec();
+    return await this.categoryModel.find().exec();
   }
 
   async findByCategory(category: string): Promise<Category> {
-    return await this.categoryModel
-      .findOne({ category })
-      .populate('players')
-      .exec();
+    const result = await this.categoryModel.findOne({ category }).exec();
+
+    if (!result) {
+      throw new NotFoundException(`Category ${category} not found`);
+    }
+    return result;
   }
 
   async addPlayerOnCategory(
     addPlayerOnCategoryDto: AddPlayerToCategoryDto,
   ): Promise<void> {
-    const category = await this.findByCategory(addPlayerOnCategoryDto.category);
-    category.players.push(addPlayerOnCategoryDto.playerId);
+    try {
+      const category = await this.categoryModel.findOne({
+        category: addPlayerOnCategoryDto.category,
+      });
 
-    await this.categoryModel
-      .findByIdAndUpdate(category._id, { $set: category })
-      .exec();
+      if (!category) {
+        throw new NotFoundException(`Category ${category} not found`);
+      }
+
+      category.players.push(addPlayerOnCategoryDto.playerId);
+
+      await this.categoryModel.updateOne({ _id: category._id }, category);
+    } catch (error) {
+      throw new InternalServerErrorException(error.message);
+    }
   }
 
   async categoryExist(category: string): Promise<boolean> {
@@ -61,7 +76,11 @@ export class CategoryRepository implements CategoryRepositoryInterface {
   }
 
   async getCategoryById(_id: string): Promise<Category> {
-    return await this.categoryModel.findById(_id);
+    const result = await this.categoryModel.findById(_id);
+    if (!result) {
+      throw new NotFoundException(`Category ${_id} not found`);
+    }
+    return result;
   }
 
   async isPlayerAlreadyOnCategory(
@@ -69,7 +88,7 @@ export class CategoryRepository implements CategoryRepositoryInterface {
   ): Promise<boolean> {
     const { category, playerId } = addPlayerOnCategoryDto;
     const isPlayerOnCategory = await this.categoryModel
-      .find({ category })
+      .findOne({ category })
       .where('players')
       .in([playerId])
       .exec();
@@ -77,5 +96,17 @@ export class CategoryRepository implements CategoryRepositoryInterface {
       return false;
     }
     return true;
+  }
+
+  async findCategoryFromPlayer(playerId: string): Promise<Category> {
+    const playerCategory = await this.categoryModel
+      .findOne()
+      .where('players')
+      .in([playerId])
+      .exec();
+    if (!playerCategory) {
+      throw new NotFoundException(`Not found category for player ${playerId}`);
+    }
+    return playerCategory;
   }
 }

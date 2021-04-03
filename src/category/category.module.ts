@@ -15,5 +15,6 @@ import { PlayerModule } from '../player/player.module';
   ],
   controllers: [CategoryController],
   providers: [CategoryRepository, CategoryService],
+  exports: [CategoryRepository],
 })
 export class CategoryModule {}

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreatePlayerDto } from './dto/create-player.dto';
@@ -25,7 +25,11 @@ export class PlayerRepository implements PlayerRepositoryInterface {
   }
 
   async findPlayerById(_id: string): Promise<Player> {
-    return await this.playerRepo.findById(_id).exec();
+    const result = await this.playerRepo.findById(_id).exec();
+    if (!result) {
+      throw new NotFoundException(`Player Not found ${_id}`);
+    }
+    return result;
   }
 
   async getPlayers(): Promise<Player[]> {
@@ -40,8 +44,8 @@ export class PlayerRepository implements PlayerRepositoryInterface {
     return await this.playerRepo.exists({ _id });
   }
 
-  async findPlayerByEmail(email: string): Promise<Player> {
-    return this.playerRepo.findOne({ email }).exec();
+  async findPlayerByEmail(email: string): Promise<Player | null> {
+    return await this.playerRepo.findOne({ email }).exec();
   }
 
   async getPlayersByIds(_ids: string[]): Promise<Array<Player>> {

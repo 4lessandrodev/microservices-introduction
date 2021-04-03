@@ -8,13 +8,13 @@ export enum Operation {
 export class CreateEventDto {
   @IsString()
   @IsNotEmpty()
-  readonly name: string;
+  readonly name!: string;
 
   @IsNotEmpty()
   @IsEnum(Operation)
-  readonly operation: keyof typeof Operation;
+  readonly operation!: keyof typeof Operation;
 
   @IsNumber()
   @IsNotEmpty()
-  readonly value: number;
+  readonly value!: number;
 }

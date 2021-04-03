@@ -3,25 +3,23 @@ import {
   IsISO8601,
   IsMongoId,
   IsNotEmpty,
-  IsString,
 } from 'class-validator';
 
 export class PlayerDto {
   @IsMongoId()
-  _id: string;
+  _id!: string;
 }
 
 export class CreateChallengeDto {
+  category!: string;
+
   @IsISO8601()
-  readonly challengeHappensAt: string;
+  readonly challengeHappensAt!: string;
 
   @IsMongoId()
-  readonly requester: string;
-
-  @IsString()
-  readonly category: string;
+  readonly requester!: string;
 
   @IsNotEmpty()
   @ArrayMinSize(2)
-  players: PlayerDto[];
+  players!: PlayerDto[];
 }

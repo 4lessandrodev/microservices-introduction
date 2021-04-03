@@ -3,7 +3,7 @@ import { CreateCategoryDto } from '../dto/create-category.dto';
 import { UpdateCategoryDto } from '../dto/update-category.dto';
 import { Category } from '../entities/category.schema';
 
-export class CategoryRepositoryInterface {
+export interface CategoryRepositoryInterface {
   saveCategory: (createCategoryDto: CreateCategoryDto) => Promise<void>;
   updateCategory: (updateCategoryDto: UpdateCategoryDto) => Promise<void>;
   deleteCategory: (_id: string) => Promise<void>;

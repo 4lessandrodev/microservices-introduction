@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ChangeChallengeStatusDto } from './dto/change-challenge-status.dto';
@@ -14,9 +14,11 @@ export class ChallengeRepository implements ChallengeRepositoryInterface {
   ) {}
 
   async saveChallenge(createChallengeDto: CreateChallengeDto): Promise<void> {
+    const players = createChallengeDto.players.map((player) => player._id);
     const challenge = await this.challengeModel.create({
       ...createChallengeDto,
       status: 'PENDING',
+      players,
     });
     await challenge.save();
   }
@@ -40,14 +42,26 @@ export class ChallengeRepository implements ChallengeRepositoryInterface {
   }
 
   async findChallangeById(_id: string): Promise<Challenge> {
-    return await this.challengeModel.findOne(
-      { _id },
-      {},
-      { populate: 'requester' },
-    );
+    const result = await this.challengeModel
+      .findOne({ _id })
+      .populate('players')
+      .populate('requester')
+      .exec();
+
+    if (!result) {
+      throw new NotFoundException(`Challenge ${_id} does not exist`);
+    }
+    return result;
   }
 
   async getChallenges(): Promise<Challenge[]> {
-    return await this.challengeModel.find();
+    const result = await this.challengeModel
+      .find()
+      .populate('requester')
+      .populate('players')
+      .exec();
+
+    console.log(result);
+    return result;
   }
 }
